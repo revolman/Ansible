@@ -1,0 +1,50 @@
+---
+
+- name: Очистка серверов перед лабораторной
+  hosts: docker_servers
+  become: yes
+
+  vars: 
+            dest_folder: /var/www/html
+
+  tasks:
+          - name: Какой тип дистрибутива?
+            debug: var=ansible_os_family
+
+          - block:
+                  - name: Удаление Apache с RedHat
+                    yum: name=httpd state=removed
+
+                  - name: Выборка файлов на удаление
+                    find: 
+                      paths: "{{ dest_folder }}"
+                      patterns: 
+                      - "*"
+                    register: FileToDelete
+
+                  - name: Очистка /var/www/html
+                    file: 
+                      path: "{{ item.path }}"
+                      state: absent
+                    with_items: "{{ FileToDelete.files }}"
+            when: ansible_os_family == "RedHat"
+
+          - block:
+                  - name: Удаление Apache с Debian
+                    yum: name=apache2 state=removed
+ 
+                  - name: Выборка файлов на удаление
+                    find: 
+                      path: "{{ dest_folder }}"
+                      patterns:
+                      - "*"
+                    register: FileToDelete
+
+                  - name: Очистка /var/www/html
+                    file: 
+                      path: "{{ item.path }}"
+                      state: absent
+                    with_items: "{{ FileToDelete.files }}"
+            when: ansible_os_family == "Debian"
+
+...
