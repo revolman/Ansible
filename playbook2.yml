@@ -1,0 +1,14 @@
+---
+
+- name: install cowsay
+  hosts: docker_servers
+  become: yes
+
+  tasks:
+          - name: Install CowSay
+            yum: name=cowsay state=latest
+
+          - name: Cow say Hello!
+            shell: cowsay Hello!
+
+...

@@ -1,0 +1,26 @@
+---
+
+- name: Loop lab
+  hosts: node1
+  become: yes
+
+  tasks:
+          - name: Loop - Hello example
+            debug: msg="Hello {{ item }}"
+            loop:
+                    - "Person1"
+                    - "Person2"
+                    - "Person3"
+
+          - name: Unil - ZZZZ example
+            shell: echo -n Z >> myz.txt && cat myz.txt
+            register: result
+            delay: 2
+            retries: 10
+            until: result.stdout.find('ZZZZ') == false
+
+          - name: Print output
+            debug:
+                    var: result.stdout
+
+...

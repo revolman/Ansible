@@ -1,0 +1,31 @@
+---
+
+- name: Играем с переменными
+  hosts: all
+  become: yes
+
+
+  vars:
+          message1: Hello
+          message2: World
+          secret: "Пунш c пирогом"
+
+
+  tasks:
+        - name: Вывод переменной secret
+          debug:
+                  var: secret
+
+        - name: Вывод Hello World!
+          debug:
+                  msg: "{{ message1 }} {{ message2 }}!"
+
+        - name: Объединение двух переменных в новую
+          set_fact: full_message="{{ message1 }} {{ message2 }} from {{ owner }}! \
+                                  Your system is {{ ansible_distribution }}."
+
+        - name: Вывод объединённой переменной
+          debug:
+                  var: full_message
+
+...

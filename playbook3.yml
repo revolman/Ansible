@@ -1,0 +1,26 @@
+---
+
+- name: Запуск сайта на чистом сервере
+  hosts: node1
+  become: yes
+
+  vars:
+          src_file: ./MySite/index.html
+          dst_file: /var/www/html
+
+  tasks:
+          - name: Установка Apache
+            yum: name=httpd state=latest
+            
+          - name: Копирование сайта
+            copy: src={{ src_file }} dest={{ dst_file }}
+            notify: Перезапуск Apache
+
+          - name: Запуск и автозагрузка Apache
+            service: name=httpd state=started enabled=yes
+
+  handlers:
+          - name: Перезапуск Apache
+            service: name=httpd state=restarted
+
+...
