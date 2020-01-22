@@ -1,0 +1,35 @@
+---
+# tasks file for apache
+
+- name: "1. Проверяю какой дистрибутив"
+  debug: var=ansible_os_family
+
+- block:    ##### Redhat #####
+  - name: "2. Установка Apache на RedHat-сервер"
+    yum: name=httpd state=latest
+                       
+  - name: "3. Запуск Apache RedHat"
+    service: name=httpd state=started enabled=yes
+  when: ansible_os_family == "RedHat"
+
+- block:    ##### Debian #####
+  - name: "2. Установка Apache на Debian-сервер"
+    apt: name=apache2 state=latest
+
+  - name: "3. Запуск Apache Debian"
+    service: name=apache2 state=started enabled=yes
+  when: ansible_os_family == "Debian"
+
+- name: "4. Генерация конфигурации"
+  copy: src=config/httpd.conf.j2 dest={{ apachePath }}/httpd.conf mode=0555         
+  notify: 
+    - redhat apache reload
+    - debian apache reload
+
+- name: "5. Перенос статики"
+  copy: src={{ item }} dest={{ DocumentRoot }}/{{ item | basename | regex_replace('\.j2','') }}.html mode=0555
+  with_fileglob:
+    - "html/*.j2"
+  notify: 
+    - redhat apache reload
+    - debian apache reload

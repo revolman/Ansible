@@ -1,0 +1,10 @@
+---
+# handlers file for apache
+
+- name: "redhat apache reload"
+  service: name=httpd state=reloaded
+  when: ansible_os_family == "RedHat"
+
+- name: "debian apache reload"
+  service: name=apache2 state=reloaded
+  when: ansible_os_family == "Debian"
