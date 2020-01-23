@@ -1,0 +1,13 @@
+---
+# vars file for nginx-php
+
+# System vars
+nginxRoot: /etc/nginx
+fpmRoot: /etc/php5/fpm
+
+# Nginx vars
+worker_connections: 1024
+err_log_level: warn
+site_root: /usr/share/nginx/html
+server_name: localhost
+sitePort: 82

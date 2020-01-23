@@ -1,0 +1,5 @@
+---
+# handlers file for nginx-php
+
+- name: "nginx-reload"
+  service: name=nginx state=reloaded

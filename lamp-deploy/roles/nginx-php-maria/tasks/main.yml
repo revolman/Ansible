@@ -1,0 +1,59 @@
+---
+# tasks file for nginx-php
+
+- name: "Отключение SELinux"
+  shell: setenforce 0
+
+- block: #### RedHat ####
+      - name: "1. Установка пакетов"
+        yum: name={{ item }} state=latest
+        with_items:
+          - "@Development tools"
+          - nginx
+          - mariadb
+          - mariadb-server
+          - net-tools
+          - MySQL-python
+          - phpmyadmin
+          - php-devel
+          - php-fpm
+          - php-cli
+          - php-mysql
+          - php-gd
+          - php-ldap
+          - php-odbc
+          - php-pdo
+          - php-pecl-memcache
+          - php-pear
+          - php-xml
+          - php-xmlrpc
+          - php-mbstring
+          - php-snmp
+          - php-soap
+  when: ansible_os_family == "RedHat"
+
+- name: "1b install APC"
+  shell: yes '' | pecl install apc
+
+- name: "2a. Загрузка конфигурации Nginx"
+  template: src=nginx.conf.j2 dest={{ nginxRoot }}/nginx.conf
+  notify: 
+    - nginx-reload
+
+- name: "2b. Загрузка конфигурации Nginx"
+  template: src=default.conf.j2 dest={{ nginxRoot }}/conf.d/default.conf
+  notify:
+    - nginx-reload
+
+- name: "3. Запуск сервисов"
+  service: name={{ item }} state=started enabled=yes
+  with_items:
+    - nginx
+    - mariadb
+
+- name: "4. Создание новой БД"
+  mysql_db: name=demo state=present collation=utf8_general_ci
+
+- name: "5. Создание юзера БД"
+  mysql_user: name=demo password=demo priv=*.*:ALL host=localhost state=present
+
