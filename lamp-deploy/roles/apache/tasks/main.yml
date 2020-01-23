@@ -6,30 +6,34 @@
 
 - block:    ##### Redhat #####
   - name: "2. Установка Apache на RedHat-сервер"
-    yum: name=httpd state=latest
-                       
-  - name: "3. Запуск Apache RedHat"
-    service: name=httpd state=started enabled=yes
+    yum: name=httpd state=latest              
   when: ansible_os_family == "RedHat"
 
 - block:    ##### Debian #####
   - name: "2. Установка Apache на Debian-сервер"
     apt: name=apache2 state=latest
-
-  - name: "3. Запуск Apache Debian"
-    service: name=apache2 state=started enabled=yes
   when: ansible_os_family == "Debian"
 
-- name: "4. Генерация конфигурации"
-  copy: src=config/httpd.conf.j2 dest={{ apachePath }}/httpd.conf mode=0555         
+- name: "3. Генерация конфигурации"
+  template: src=config/httpd.conf.j2 dest={{ ApacheConfigRoot }}/httpd.conf mode=0555         
   notify: 
     - redhat apache reload
     - debian apache reload
 
-- name: "5. Перенос статики"
-  copy: src={{ item }} dest={{ DocumentRoot }}/{{ item | basename | regex_replace('\.j2','') }}.html mode=0555
+- block:    #### Debian apache2 start ####
+  - name: "4. Запуск Apache Debian"
+    service: name=apache2 state=started enabled=yes
+  when: ansible_os_family == "Debian"
+
+- block: 
+  - name: "4. Запуск Apache RedHat"
+    service: name=httpd state=started enabled=yes
+  when: ansible_os_family == "Redhat"
+
+- name: "5. Перенос содержимого сайта"
+  template: src={{ item }} dest={{ DocumentRoot1 }}/{{ item | basename | regex_replace('\.j2','') }} mode=0555
   with_fileglob:
-    - "html/*.j2"
+    - html/*.j2
   notify: 
     - redhat apache reload
     - debian apache reload

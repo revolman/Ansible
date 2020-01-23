@@ -1,6 +1,6 @@
 
 ServerRoot "/etc/httpd"
-Listen 80
+Listen {{ Port }}
 Include conf.modules.d/*.conf
 User apache
 Group apache
@@ -11,7 +11,7 @@ ServerAdmin root@localhost
     Require all denied
 </Directory>
 
-DocumentRoot "/var/www/html"
+DocumentRoot "{{ DocumentRoot1 }}"
 
 <Directory "/var/www">
     AllowOverride None
@@ -19,7 +19,7 @@ DocumentRoot "/var/www/html"
     Require all granted
 </Directory>
 
-<Directory "/var/www/html">
+<Directory "{{ DocumentRoot1 }}">
     Options Indexes FollowSymLinks
     AllowOverride None
     Require all granted

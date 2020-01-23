@@ -1,2 +1,6 @@
 ---
 # vars file for apache
+ApacheConfigRoot: /etc/httpd/conf
+DocumentRoot1: /var/www/html
+DocumentRoot2: /var/www/html/site2.ru
+Port: 81

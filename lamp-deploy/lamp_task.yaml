@@ -1,8 +1,6 @@
 ---
 # This playbook will install LAMP
 - hosts: sandbox
+  become: yes
   roles:
-    - apache
-    - mysql
-    - phpmyadmin
-    
+    - apache  
