@@ -1,0 +1,34 @@
+---
+
+- name:
+  hosts: sandbox
+  become: yes
+
+  tasks:
+   - name: "1. Установка пакетов"
+     yum: name={{ item }} state=removed
+     with_items:
+       - "@Development tools"
+       - nginx
+       - mariadb
+       - mariadb-server
+       - net-tools
+       - MySQL-python
+       - phpmyadmin
+       - php-devel
+       - php-fpm
+       - php-cli
+       - php-mysql
+       - php-gd
+       - php-ldap
+       - php-odbc
+       - php-pdo
+       - php-pecl-memcache
+       - php-pear
+       - php-xml
+       - php-xmlrpc
+       - php-mbstring
+       - php-snmp
+       - php-soap
+
+...

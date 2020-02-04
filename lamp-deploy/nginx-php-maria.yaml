@@ -1,0 +1,4 @@
+- hosts: sandbox
+  become: yes
+  roles:
+    - nginx-php-maria
