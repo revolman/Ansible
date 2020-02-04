@@ -1,0 +1,9 @@
+---
+# tasks file for wordpress
+
+- name: Закачка архива wordpress
+  get_url: url=https://wordpress.org/latest.tar.gz dest=/tmp/
+
+- name: Распаковка
+  unarchive: src=/tmp/latest.tar.gz dest=/usr/share/nginx/ owner=nginx group=nginx
+  

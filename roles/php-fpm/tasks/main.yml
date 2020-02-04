@@ -1,0 +1,69 @@
+---
+# tasks file for php-fpm
+
+- block: #### RedHat ####
+  - name: 1.Проверка, установлен ли epel-repo.
+    stat: path={{ epel_repofile_path }}
+    register: epel_repofile_result
+
+  - name: 2.Установка epel-repo.
+    yum:
+      name: "{{ epel_repo_url }}"
+      state: present
+    register: result
+    when: not epel_repofile_result.stat.exists
+
+  - name: 3.Import EPEL GPG key.
+    rpm_key:
+      key: "{{ epel_repo_gpg_key_url }}"
+      state: present
+    when: not epel_repofile_result.stat.exists
+
+  - name: 4.Проверка, установлен ли remi-repo.
+    stat: path={{ remi_repo_path }}
+    register: remi_repofile_result
+
+  - name: 5.Установка remi-repo
+    yum:
+      name: "{{ remi_repo_url }}"
+      state: present
+    register: result
+    when: not remi_repofile_result.stat.exests
+
+  - name: 6.Import REMI GPG key.
+    rpm_key:
+      key: "{{ remi_repo_gpg_key_url }}"
+      state: present
+    when: not remi_repofile_result.stat.exist
+
+  - name: 7.yum-utils install
+    yum: name=yum-utils state=latest
+
+  - name: 8.enable remi-php72
+    shell: yum-config-manager --enable remi-php72
+
+  - name: 9.Обновить кэш репозиториев
+    yum: update_cache=yes
+
+  - name: 10.Установка пакетов
+    yum: name={{ item }} state=present
+    with_items:
+      - php72
+      - php72-php-fpm
+      - php72-php-gd
+      - php72-php-json
+      - php72-php-mbstring
+      - php72-php-mysqlnd
+      - php72-php-xml
+      - php72-php-xmlrpc
+      - php72-php-opcache
+
+  when: ansible_os_family == 'RedHat'
+
+- name: 11. Запуск PHP-FPM
+  service: name=php72-php-fpm state=started enabled=yes
+
+- name: 12. Перенос конфигурации
+  file: src=www.conf dest=/etc/opt/remi/php72/php-fpm.d/ mode=0644
+  notify: 
+    - fpm-reload

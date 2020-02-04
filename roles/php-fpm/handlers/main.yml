@@ -1,0 +1,5 @@
+---
+# handlers file for php-fpm
+
+- name: fpm-reload
+  service: name=php72-php-fpm state=reloaded
