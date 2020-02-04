@@ -11,9 +11,6 @@
     apt: name=nginx state=latest
   when: ansible_os_family == "Debian"
 
-- name: Запуск Nginx
-  sevice: name=nginx state=started enabled=yes
-
 - name: Перенос конфигурации
   file: src=nginx.conf dest={{ nginxConf }} mode=0644
   notify:
@@ -32,3 +29,6 @@
   file: src=default.conf dest={{ nginxConf }}/conf.d mode=0644
   notify:
   - nginx-reload
+
+- name: Запуск Nginx
+  service: name=nginx state=started enabled=yes
