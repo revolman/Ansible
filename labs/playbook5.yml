@@ -5,12 +5,12 @@
   become: yes
 
   tasks:
-          - name: Сохранение вывода в переменную results
-            shell: uptime
-            register: results
+    - name: Сохранение вывода в переменную results
+      shell: uptime
+      register: results
 
-          - name: Вывод переменной results
-            debug:
-                    var: results.stdout
+    - name: Вывод переменной results
+      debug:
+              var: results.stdout
 
 ...

@@ -13,14 +13,14 @@
     register: result
     when: not epel_repofile_result.stat.exists
 
-  - name: 3.Import EPEL GPG key.
+  - name: 3.Добавление EPEL GPG-ключа.
     rpm_key:
       key: "{{ epel_repo_gpg_key_url }}"
       state: present
     when: not epel_repofile_result.stat.exists
 
   - name: 4.Проверка, установлен ли remi-repo.
-    stat: path={{ remi_repo_path }}
+    stat: path={{ remi_repofile_path }}
     register: remi_repofile_result
 
   - name: 5.Установка remi-repo
@@ -28,13 +28,13 @@
       name: "{{ remi_repo_url }}"
       state: present
     register: result
-    when: not remi_repofile_result.stat.exests
+    when: not remi_repofile_result.stat.exists
 
-  - name: 6.Import REMI GPG key.
+  - name: 6.Добавление REMI GPG-ключа.
     rpm_key:
       key: "{{ remi_repo_gpg_key_url }}"
       state: present
-    when: not remi_repofile_result.stat.exist
+    when: not remi_repofile_result.stat.exists
 
   - name: 7.yum-utils install
     yum: name=yum-utils state=latest
@@ -42,11 +42,8 @@
   - name: 8.enable remi-php72
     shell: yum-config-manager --enable remi-php72
 
-  - name: 9.Обновить кэш репозиториев
-    yum: update_cache=yes
-
-  - name: 10.Установка пакетов
-    yum: name={{ item }} state=present
+  - name: 9.Установка пакетов
+    yum: name={{ item }} state=present update_cache=yes
     with_items:
       - php72
       - php72-php-fpm
@@ -60,10 +57,10 @@
 
   when: ansible_os_family == 'RedHat'
 
-- name: 11. Запуск PHP-FPM
+- name: 10. Запуск PHP-FPM
   service: name=php72-php-fpm state=started enabled=yes
 
-- name: 12. Перенос конфигурации
-  file: src=www.conf dest=/etc/opt/remi/php72/php-fpm.d/ mode=0644
+- name: 11. Перенос конфигурации
+  copy: src=www.conf dest=/etc/opt/remi/php72/php-fpm.d/ mode=0644
   notify: 
     - fpm-reload

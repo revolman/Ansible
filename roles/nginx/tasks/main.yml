@@ -2,33 +2,36 @@
 # tasks file for nginx
 
 - block: ####RedHat####
-  - name: "Установка Nginx"
+  - name: 1.Установка Nginx
     yum: name=nginx state=latest
   when: ansible_os_family == "RedHat"
 
 - block: ####Debian####
-  - name: "Установка Nginx"
+  - name: 1.Установка Nginx"
     apt: name=nginx state=latest
   when: ansible_os_family == "Debian"
 
-- name: Перенос конфигурации
-  file: src=nginx.conf dest={{ nginxConf }} mode=0644
+- name: 2.Перенос конфигурации
+  copy: src={{ item }} dest={{ nginxConf }} mode=0644
+  with_items:
+    - nginx.conf
+    - fastcgi.conf
   notify:
   - nginx-reload
 
-- name: Создание директории для ключей
+- name: 3.Перенос vhost
+  copy: src=default.conf dest={{ nginxConf }}/conf.d mode=0644
+  notify:
+  - nginx-reload
+
+- name: 4.Создание директории для ключей
   file: path={{ nginxConf }}/ssl state=directory
 
-- name: Перенос ssl-ключей
-  file: src=ssl/{{ item }} dest={{ nginxConf }}/ssl/
-  withitem:
+- name: 5.Перенос ssl-ключей
+  copy: src=ssl/{{ item }} dest={{ nginxConf }}/ssl/
+  with_items:
     - nginx.crt
     - nginx.key
 
-- name: Перенос vhost
-  file: src=default.conf dest={{ nginxConf }}/conf.d mode=0644
-  notify:
-  - nginx-reload
-
-- name: Запуск Nginx
+- name: 6.Запуск Nginx
   service: name=nginx state=started enabled=yes
