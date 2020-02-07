@@ -1,5 +1,4 @@
 ---
-<<<<<<< Updated upstream
 # Основной файл
 
 # Установка дял RedHat
@@ -7,11 +6,5 @@
   when: ansible_os_family == 'RedHat'
 
 # Конфигурирование mysql 
+- include_tasks: variables.yml
 - include_tasks: configure.yml
- 
-=======
-# tasks file for mariadb
-
-- block:
-  - name: 
->>>>>>> Stashed changes
