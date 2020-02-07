@@ -1,0 +1,15 @@
+---
+# Роль конфигурирования mysql
+
+- name: Копирование глобальной конфигурации
+  template:
+    src: my.cfg.j2
+    dest: {{ mysql_config_file }}
+    owner: root
+    group: root
+    mode: 0644
+    force: {{ overwrite_global_mycnf }}
+  notify: restart mysql
+
+- name: 
+

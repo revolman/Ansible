@@ -1,0 +1,11 @@
+---
+# Главная роль, к которой будуд подключены другие
+
+# Установка на redhat
+- include_tasks: install-redhat.yml
+  when: ansible_os_family == 'RedHat'
+
+# Конфигурирование
+- include_tasks: configure.yml
+- include_tasks: databases.yml
+- include_tasks: users.yml

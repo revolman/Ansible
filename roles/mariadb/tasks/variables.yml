@@ -1,0 +1,47 @@
+---
+# Применение пользовательских переменных, если не указаны defaults
+
+- name: Назначение имени сервиса
+  set_fact:
+    mysql_daemon: {{ __mysql_daemon }}
+  when: mysql_daemon is not defined
+
+- name: Назначение пакетов на установку
+  set_fact:
+    mysql_packages: {{ __mysql_packages }}
+  when: mysql_packages is not defined
+
+- name: Путь к глобальному конфигу
+  set_fact:
+    mysql_config_file: {{ __mysql_config_file }}
+  when: mysql_config_file is not defined
+
+- name: Сокет
+  set_fact:
+    mysql_socket: {{ __mysql_socket }}
+  when: mysql_socket is not defined
+
+- name: PID-file
+  set_fact:
+    mysql_pid_file: {{ __mysql_pid_file }}
+  when: mysql_pid_file is not defined
+
+- name: Путь к логу ошибок
+  set_fact:
+    mysql_log_error: {{ __mysql_log_error }}
+  when: mysql_log_error is not defined
+
+- name: Путь к логу медленных запросов
+  set_fact:
+    mysql_slow_query_log: {{ __mysql_slow_query_log }}
+  when: mysql_slow_query_log is not defined
+
+- name: Каталог данных
+  set_fact:
+    mysql_datadir: {{ __mysql_datadir }}
+  when: mysql_datadir is not defined
+
+- name: Config dir
+  set_fact:
+    mysql_config_include_dir: {{ __mysql_config_include_dir }}
+  when: mysql_config_include_dir is not defined

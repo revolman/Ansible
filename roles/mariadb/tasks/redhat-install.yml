@@ -1,0 +1,8 @@
+---
+# Установка компонентов MariDB
+
+- name: Установка MariaDB
+  yum:
+    name: {{ mysql_packages }}
+    state: present
+    

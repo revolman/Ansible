@@ -1,0 +1,26 @@
+---
+# Конфигурирование mysql
+
+- name: Перенос шаблона глобального конфига
+  template:
+    src: my.cnf.j2
+    dest: {{ mysql_config_file }}
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart mysql
+
+- name: Созание папки с данными mysql
+  file:
+    path: {{ mysql_datadir }}
+    state: direcorty
+    owner: mysql
+    group: mysql
+    mode: 0755
+
+- name: Запуск mysql
+  service: 
+    name: {{ mysql_daemon }}
+    state: started
+    enabled: yes
+

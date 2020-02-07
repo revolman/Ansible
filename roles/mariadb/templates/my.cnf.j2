@@ -1,0 +1,26 @@
+[client]
+port={{  }}
+socket={{  }}
+
+
+[mysqld]
+port=3307
+datadir={{ mysql_datadir }}
+socket={{ mysql_socket }}
+
+
+
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+
+
+
+
+[mysqld_safe]
+log-error={{ mysql_log_error }}
+pid-file={{ mysql_pid_file }}
+
+#
+# include all files from the config directory
+#
+!includedir {{ mysql_config_include_dir }}

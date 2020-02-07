@@ -1,2 +1,32 @@
 ---
-# vars file for mariadb
+# Пользовательские переменные.
+
+# Имя сервиса
+__mysql_daemon: mariadb
+
+# Необходимые пакеты
+__mysql_packages:
+  - mariadb
+  - mariadb-server
+  - mariadb-libs
+  - MySQL-python
+  - perl-DBD-MySQL
+
+# Путь к глобальному конфигу
+__mysql_config_file: /etc/my.cnf
+
+# Сокет
+__mysql_socket: /var/lib/mysql/mysql.sock
+
+# PID
+__mysql_pid_file: /var/run/mariadb/mariadb.pid
+
+# Пути логов
+__mysql_log_error: /var/log/mariadb/mariadb.log
+__mysql_slow_query_log: /var/log/mysql-slow.log
+
+# Каталог данных
+__mysql_datadir: /var/lib/mysql
+
+# Каталог с доп. конфигурацией
+__mysql_config_include_dir: /etc/my.cnf.d
