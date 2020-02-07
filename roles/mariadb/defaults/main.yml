@@ -1,2 +1,16 @@
 ---
-# defaults file for mariadb
+# Дефолтные переменные mariadb
+
+# Настройки подключения
+mysql_port: 3306
+mysql_bind_address: 0.0.0.0
+mysql_skip_name_resolve: false
+mysql_datadir: /var/lib/mysql
+mysql_sql_mode: ''
+
+# Логирование
+mysql_syslog_tag: ''
+# Slow query log settings.
+mysql_slow_query_log_enabled: false
+mysql_slow_query_time: "2"
+

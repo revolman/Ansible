@@ -33,8 +33,8 @@
 
 - name: Путь к логу медленных запросов
   set_fact:
-    mysql_slow_query_log: {{ __mysql_slow_query_log }}
-  when: mysql_slow_query_log is not defined
+    mysql_slow_query_log_file: {{ __mysql_slow_query_log_file }}
+  when: mysql_slow_query_log_file is not defined
 
 - name: Каталог данных
   set_fact:

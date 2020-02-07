@@ -1,24 +1,70 @@
 [client]
-port={{  }}
-socket={{  }}
-
+port = {{ mysql_port }}
+socket = {{ mysql_socket }}
 
 [mysqld]
-port=3307
-datadir={{ mysql_datadir }}
-socket={{ mysql_socket }}
+port = {{ mysql_port }}
+bind = {{ mysql_bind_address }}
+datadir = {{ mysql_datadir }}
+socket = {{ mysql_socket }}
+pid-file = {{ mysql_pid_file }}
+{% if mysql_skip_name_resolve %}
+skip-name-resolve
+{% endif %}
+{% if mysql_sql_mode %}
+sql_mode = {{ mysql_sql_mode }}
+{% endif %}
 
+# Блок логирования
+{% if mysql_log_error == 'syslog' or mysql_log == 'syslog' %}
+syslog
+syslog-tag = {{ mysql_syslog_tag }}
+{% else %}
+log-error = {{ mysql_log_error }}
+{% endif %}
+{% if mysql_slow_query_log_enabled %}
+# Slow query log configuration.
+slow_query_log = 1
+slow_query_log_file = {{ mysql_slow_query_log_file }}
+long_query_time = {{ mysql_slow_query_time }}
+{% endif %}
 
+# Начало блока настроек реплицирования
+# условие: если переменная содержащая master | slave не пустая то
+# server-id =
+# условие: если эта переменная == MASTER то:
+# log_bin = mysql-bin
+# log-bin-index = mysql-bin.index
+# expire_logs_days = {{ mysql_expire_logs_days }}
+# max_binlog_size = {{ mysql_max_binlog_size }}
+# binlog_format = {{mysql_binlog_format}}
+# {% for db in mysql_databases %}
+# {% if db.replicate|default(1) %}
+# binlog_do_db = {{ db.name }}
+# {% else %}
+# binlog_ignore_db = {{ db.name }}
+# {% endif %}
+# {% endfor %}
+# {% endif %}
+# условие: если эта переменная == SLAVE то:
+# read_only
+# relay-log = relay-bin
+# relay-log-index = relay-bin.index
+# Конец блока реплицирования
 
 # Disabling symbolic-links is recommended to prevent assorted security risks
 symbolic-links=0
 
+# User is ignored when systemd is used (fedora >= 15).
+user = mysql
 
-
+##################################### Продолжить отсюда
+#https://github.com/geerlingguy/ansible-role-mysql/blob/master/templates/my.cnf.j2
+#####################################
 
 [mysqld_safe]
-log-error={{ mysql_log_error }}
-pid-file={{ mysql_pid_file }}
+
+
 
 #
 # include all files from the config directory

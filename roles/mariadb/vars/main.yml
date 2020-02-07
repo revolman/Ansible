@@ -23,7 +23,7 @@ __mysql_pid_file: /var/run/mariadb/mariadb.pid
 
 # Пути логов
 __mysql_log_error: /var/log/mariadb/mariadb.log
-__mysql_slow_query_log: /var/log/mysql-slow.log
+__mysql_slow_query_log_file: /var/log/mysql-slow.log
 
 # Каталог данных
 __mysql_datadir: /var/lib/mysql
