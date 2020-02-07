@@ -1,4 +1,5 @@
 ---
+<<<<<<< Updated upstream
 # Основной файл
 
 # Установка дял RedHat
@@ -8,3 +9,9 @@
 # Конфигурирование mysql 
 - include_tasks: configure.yml
  
+=======
+# tasks file for mariadb
+
+- block:
+  - name: 
+>>>>>>> Stashed changes
