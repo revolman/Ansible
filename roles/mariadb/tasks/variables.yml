@@ -1,6 +1,12 @@
 ---
 # Применение пользовательских переменных, если не указаны defaults
 
+- name: Разбираемся какая у нас версия MySQL
+  command: 'mysql --version'
+  register: mysql_cli_version
+  changed_when: false
+  check_mode: false
+
 - name: Назначение имени сервиса
   set_fact:
     mysql_daemon: {{ __mysql_daemon }}
@@ -45,3 +51,8 @@
   set_fact:
     mysql_config_include_dir: {{ __mysql_config_include_dir }}
   when: mysql_config_include_dir is not defined
+
+- name: Большие префиксы InnoDB
+  set_fact:
+    mysql_supports_innodb_large_prefix: {{ __mysql_supports_innodb_large_prefix }}
+  when: mysql_supports_innodb_large_prefix is not defined

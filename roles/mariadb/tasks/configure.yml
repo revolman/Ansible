@@ -23,4 +23,3 @@
     name: {{ mysql_daemon }}
     state: started
     enabled: yes
-

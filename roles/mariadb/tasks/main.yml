@@ -8,3 +8,5 @@
 # Конфигурирование mysql 
 - include_tasks: variables.yml
 - include_tasks: configure.yml
+- include_tasks: databases.yml
+- include_tasks: users.yml
