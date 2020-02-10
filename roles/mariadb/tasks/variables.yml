@@ -1,58 +1,52 @@
 ---
 # Применение пользовательских переменных, если не указаны defaults
 
-- name: Разбираемся какая у нас версия MySQL
-  command: 'mysql --version'
-  register: mysql_cli_version
-  changed_when: false
-  check_mode: false
-
 - name: Назначение имени сервиса
   set_fact:
-    mysql_daemon: {{ __mysql_daemon }}
+    mysql_daemon: "{{ __mysql_daemon }}"
   when: mysql_daemon is not defined
 
 - name: Назначение пакетов на установку
   set_fact:
-    mysql_packages: {{ __mysql_packages }}
+    mysql_packages: "{{ __mysql_packages }}"
   when: mysql_packages is not defined
 
 - name: Путь к глобальному конфигу
   set_fact:
-    mysql_config_file: {{ __mysql_config_file }}
+    mysql_config_file: "{{ __mysql_config_file }}"
   when: mysql_config_file is not defined
 
 - name: Сокет
   set_fact:
-    mysql_socket: {{ __mysql_socket }}
+    mysql_socket: "{{ __mysql_socket }}"
   when: mysql_socket is not defined
 
 - name: PID-file
   set_fact:
-    mysql_pid_file: {{ __mysql_pid_file }}
+    mysql_pid_file: "{{ __mysql_pid_file }}"
   when: mysql_pid_file is not defined
 
 - name: Путь к логу ошибок
   set_fact:
-    mysql_log_error: {{ __mysql_log_error }}
+    mysql_log_error: "{{ __mysql_log_error }}"
   when: mysql_log_error is not defined
 
 - name: Путь к логу медленных запросов
   set_fact:
-    mysql_slow_query_log_file: {{ __mysql_slow_query_log_file }}
+    mysql_slow_query_log_file: "{{ __mysql_slow_query_log_file }}"
   when: mysql_slow_query_log_file is not defined
 
 - name: Каталог данных
   set_fact:
-    mysql_datadir: {{ __mysql_datadir }}
+    mysql_datadir: "{{ __mysql_datadir }}"
   when: mysql_datadir is not defined
 
 - name: Config dir
   set_fact:
-    mysql_config_include_dir: {{ __mysql_config_include_dir }}
+    mysql_config_include_dir: "{{ __mysql_config_include_dir }}"
   when: mysql_config_include_dir is not defined
 
 - name: Большие префиксы InnoDB
   set_fact:
-    mysql_supports_innodb_large_prefix: {{ __mysql_supports_innodb_large_prefix }}
+    mysql_supports_innodb_large_prefix: "{{ __mysql_supports_innodb_large_prefix }}"
   when: mysql_supports_innodb_large_prefix is not defined

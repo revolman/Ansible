@@ -4,5 +4,5 @@
 # Перезапуск сервиса mysql
 - name: restart mysql
   service: 
-    name: {{ mysql_daemon }}
+    name: "{{ mysql_daemon }}"
     state: restarted

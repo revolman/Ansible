@@ -1,6 +1,23 @@
 ---
 # Дефолтные переменные mariadb
 
+# Пользователь по умолчанию (см. secure-installation.yml)
+mysql_user_home: /root
+mysql_user_name: root
+mysql_user_password: root
+
+# Дефолтный рут
+mysql_root_home: /root
+mysql_root_username: root
+mysql_root_password: root
+
+# Set this to `true` to forcibly update the root password.
+mysql_root_password_update: false
+mysql_user_password_update: false
+
+# Разрешить репозитории, по умолчанию будет omit (e.g. "remi,epel")
+mysql_enablerepo: "remi,epel"
+
 # Настройки подключения к БД
 mysql_port: "3306"
 mysql_bind_address: '0.0.0.0'
@@ -8,8 +25,12 @@ mysql_skip_name_resolve: false
 mysql_datadir: /var/lib/mysql
 mysql_sql_mode: ''
 
-# Логирование
-mysql_syslog_tag: ''
+# Логирование 
+mysql_syslog_tag: mysql
+mysql_log: /var/log/mysql/mysql.log
+mysql_log_error: /var/log/mysql/mysql.err
+mysql_log_path: /vat/log/mysql
+
 # Slow query log settings.
 mysql_slow_query_log_enabled: false
 mysql_slow_query_time: "2"
@@ -42,7 +63,7 @@ mysql_innodb_file_per_table: "1"
 # Set .._buffer_pool_size up to 80% of RAM but beware of setting too high.
 mysql_innodb_buffer_pool_size: "256M"
 # Set .._log_file_size to 25% of buffer pool size.
-mysql_innodb_log_file_size: "64M"
+mysql_innodb_log_file_size: "5M"
 mysql_innodb_log_buffer_size: "8M"
 mysql_innodb_flush_log_at_trx_commit: "1"
 mysql_innodb_lock_wait_timeout: "50"
@@ -71,14 +92,17 @@ mysql_users:
     host: 127.0.0.1
     password: secret123
     priv: 'mywp.*:ALL/example.*:CREATE,SELECT'
+  - name: revolman
+    host: 127.0.0.1
+    password: revolman
+    priv: '*.*:ALL,GRANT'
 
-
-# # Replication settings (replication is only enabled if master/user have values).
-# mysql_server_id: "1"
-# mysql_max_binlog_size: "100M"
-# mysql_binlog_format: "ROW"
-# mysql_expire_logs_days: "10"
-# mysql_replication_role: ''
-# mysql_replication_master: ''
-# # Same keys as `mysql_users` above.
-# mysql_replication_user: []
+# Replication settings (replication is only enabled if master/user have values).
+mysql_server_id: "1"
+mysql_max_binlog_size: "100M"
+mysql_binlog_format: "ROW"
+mysql_expire_logs_days: "10"
+mysql_replication_role: ''
+mysql_replication_master: ''
+# Same keys as `mysql_users` above.
+mysql_replication_user: []

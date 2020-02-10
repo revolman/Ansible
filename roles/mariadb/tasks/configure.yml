@@ -1,10 +1,16 @@
 ---
 # Конфигурирование mysql
 
+- name: Разбираемся какая у нас версия MySQL
+  command: 'mysql --version'
+  register: mysql_cli_version
+  changed_when: false
+  check_mode: false
+
 - name: Перенос шаблона глобального конфига
   template:
     src: my.cnf.j2
-    dest: {{ mysql_config_file }}
+    dest: "{{ mysql_config_file }}"
     owner: root
     group: root
     mode: 0644
@@ -12,14 +18,33 @@
 
 - name: Созание папки с данными mysql
   file:
-    path: {{ mysql_datadir }}
-    state: direcorty
+    path: "{{ mysql_datadir }}"
+    state: directory
     owner: mysql
     group: mysql
     mode: 0755
 
+- name: Создании лог директории
+  file:
+    path: "{{ mysql_log_path }}"
+    state: directory
+    owner: mysql
+    group: root
+    mode: 0755
+
+- name: Создание лог файлов
+  file:
+    path: "{{ item }}"
+    state: touch
+    owner: mysql
+    group: root
+    mode: 0644
+  with_items:
+    - "{{ mysql_log_error }}"
+    - "{{ mysql_log }}"
+
 - name: Запуск mysql
   service: 
-    name: {{ mysql_daemon }}
+    name: "{{ mysql_daemon }}"
     state: started
     enabled: yes
