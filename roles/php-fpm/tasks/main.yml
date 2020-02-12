@@ -57,10 +57,10 @@
 
   when: ansible_os_family == 'RedHat'
 
-- name: 10. Запуск PHP-FPM
-  service: name=php72-php-fpm state=started enabled=yes
-
-- name: 11. Перенос конфигурации
+- name: 10. Перенос конфигурации
   copy: src=www.conf dest=/etc/opt/remi/php72/php-fpm.d/ mode=0644
   notify: 
     - fpm-reload
+
+- name: 11. Запуск PHP-FPM
+  service: name=php72-php-fpm state=started enabled=yes
