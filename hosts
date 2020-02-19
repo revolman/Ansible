@@ -1,10 +1,10 @@
-[k8s]
-node1	
+[k8s]	
 node2
 node3
+node4
 
 [docker]
 node1
 
 [sandbox]
-node1
+node3

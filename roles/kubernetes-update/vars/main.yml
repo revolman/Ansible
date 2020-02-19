@@ -1,0 +1,5 @@
+---
+# vars file for kubernetes-update
+
+backup_directory: /home/revolman/k8s_backup
+bin_path: /usr/local/bin

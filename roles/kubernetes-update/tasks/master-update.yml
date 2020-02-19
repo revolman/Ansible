@@ -1,0 +1,46 @@
+---
+# Обновление мастер-ноды
+
+- name: Остановка сервисов
+  service:
+    name: "{{ item }}"
+    state: stopped
+  with_items:
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler
+
+- name: Создание папки для бэкапа
+  file:
+    path: "{{ backup_directory }}"
+    state: directory
+    mode: 0755
+  
+- name: Создание бэкапа
+  copy:
+    remote_src: True
+    src: /usr/local/bin/{{ item }}
+    dest: "{{ backup_directory }}"
+  with_items:
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler
+
+- name: Замена бинарников
+  copy:
+    src: "{{ item }}"
+    dest: "{{ bin_path }}"
+    mode: 0775
+  with_items:
+    - server/kube-apiserver
+    - server/kube-controller-manager
+    - server/kube-scheduler
+
+- name: Запуск сервисов
+  service:
+    name: "{{ item }}"
+    state: started
+  with_items:
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler

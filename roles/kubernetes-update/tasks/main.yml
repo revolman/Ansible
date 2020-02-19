@@ -1,0 +1,13 @@
+---
+# Основной таск для обновления kubernetes
+
+- name: Определение роли ноды.
+  shell: role=$(hostname | sed 's/-[0-9]\+$//g') && echo $role
+  register: node_role
+     
+# Установка для мастера
+- include_tasks: master-update.yml
+  when: node_role.stdout == "controller"
+
+- include_tasks: slave-update.yml
+  when: node_role.stdout == "worker"

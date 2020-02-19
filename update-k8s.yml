@@ -1,0 +1,6 @@
+---
+
+- hosts: kube-test
+  become: yes
+  roles:
+    - kubernetes-update
