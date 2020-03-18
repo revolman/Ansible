@@ -3,5 +3,6 @@
 
 ## /roles/
 
-Создержит роли для создания веб-сервера с wordpress
-Плейбук use-roles.yaml
+Создержит роли различные роли, которые вызываются плейбуками из корня
+- плейбук use-roles.yml - вызов mariadb, nginx, php-fpm, wordpress
+- плейбук use-roles-elk.yml - установка ELK-стека на centos
