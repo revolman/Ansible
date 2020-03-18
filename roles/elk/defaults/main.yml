@@ -1,0 +1,56 @@
+---
+# defaults file for elk.
+# Все конфиги нужно вынести в шаблоны
+
+elastic_repo_key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+elastic_repo: | 
+  [ELK-6.x]
+  name=ELK repository for 6.x packages
+  baseurl=https://artifacts.elastic.co/packages/6.x/yum
+  gpgcheck=1
+  gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+  enabled=1
+  autorefresh=1
+  type=rpm-md
+
+nginx_path: /etc/nginx/conf.d
+nginx_kibana_conf: |
+  server {
+    listen 82;
+    server_name server.example.com;
+    location / {
+        proxy_pass http://localhost:5601;
+    }
+  }
+
+logstash_path: /etc/logstash/conf.d/
+logstash_conf: | 
+  input {
+    beats {
+      port => 5044
+      ssl => true
+      ssl_certificate => "/etc/pki/tls/certs/logstash.crt"
+      ssl_key => "/etc/pki/tls/private/logstash.key"
+    }
+  }
+  filter {
+      if [type] == "syslog" {
+          grok {
+              match => {
+                  "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}"
+              }
+              add_field => [ "received_at", "%{@timestamp}" ]
+              add_field => [ "received_from", "%{host}" ]
+          }
+          syslog_pri { }
+          date {
+              match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
+          }
+      }
+  }
+  output {
+      elasticsearch {
+          hosts => "localhost:9200"
+          index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
+      }
+  }

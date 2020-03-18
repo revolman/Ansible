@@ -1,0 +1,21 @@
+---
+# Установка пакетов
+
+- name: Установка Java
+  yum: name="java-1.8.0-openjdk" state=present update_cache=yes
+  
+- name: Установка Elasticsearch
+  yum: name="elasticsearch" state=present update_cache=yes
+
+- name: Установка репозитория epel
+  yum: name="epel-release" state=present update_cache=yes  
+
+- name: Установка Logstash
+  yum: name="logstash" state=present update_cache=yes
+
+- name: Установка Nginx
+  yum: name="nginx" state=present update_cache=yes
+
+- name: Установка Kibana
+  yum: name="kibana" state=present update_cache=yes
+  

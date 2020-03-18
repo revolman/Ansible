@@ -1,0 +1,21 @@
+---
+# Перенос конфигов
+
+- name: Конфиг Nginx
+  copy: 
+    content: "{{ nginx_kibana_conf }}"
+    dest: "{{ nginx_path }}/kibana.conf"
+
+- name: Nginx удалить deafult.conf
+  file:
+    path: "{{ nginx_path }}/default.conf"
+    state: absent
+
+- name: Генерация сертика logstash
+  shell: 
+    cmd: "openssl req -subj '/CN=server.example.com/' -x509 -days 3650 -nodes -batch -newkey rsa:2048 -keyout /etc/pki/tls/private/logstash.key -out /etc/pki/tls/certs/logstash.crt"
+
+- name: Конфиг logstash
+  copy: 
+    content: "{{ logstash_conf }}"
+    dest: "{{ logstash_path }}/01-logstash-simple.conf"

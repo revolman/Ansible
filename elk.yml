@@ -1,0 +1,38 @@
+- name: Устновка elk
+  hosts: sandbox
+  become: yes
+
+  vars:
+    - key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+  tasks:
+    - name: Репозиторий PGP-key
+      rpm_key:
+        state: present
+        key: "{{ key }}"
+
+    - name: Add repo elactic
+      copy:
+        content: |
+          [ELK-6.x]
+          name=ELK repository for 6.x packages
+          baseurl=https://artifacts.elastic.co/packages/6.x/yum
+          gpgcheck=1
+          gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+          enabled=1
+          autorefresh=1
+          type=rpm-md
+        dest: "/etc/yum.repos.d/elk.repo"
+    
+    - name: Установка пакетов
+      yum: name={{ item }} state=present update_cache=yes
+      loop:
+        - java-1.8.0-openjdk
+        - elasticsearch
+        - kibana
+        - logstash
+
+    - name: Включение Elastic
+      service: name="elasticsearch" state="started" enabled="yes"
+
+    

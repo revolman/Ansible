@@ -1,0 +1,31 @@
+---
+# Главная задача elk
+
+- import_tasks: repos.yml
+- import_tasks: firewalld.yml
+- import_tasks: install.yml
+- import_tasks: configure.yml
+
+- name: Включить elasticsearch
+  service:
+    name: elasticsearch
+    state: started
+    enabled: yes
+
+- name: Включить kibana
+  service:
+    name: kibana
+    state: started
+    enabled: yes
+
+- name: Включить nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Включить logstash
+  service:
+    name: logstash
+    state: started
+    enabled: yes

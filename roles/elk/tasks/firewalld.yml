@@ -1,0 +1,16 @@
+---
+# Открытие портов
+
+- name: Порт 82
+  firewalld:
+    zone: public
+    port: 82/tcp
+    state: enabled
+    permanent: yes
+
+- name: Порт 5044
+  firewalld:
+    zone: public
+    port: 5044/tcp
+    state: enabled
+    permanent: yes
