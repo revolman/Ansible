@@ -1,0 +1,32 @@
+---
+- name: Создание пользователя и добавление ключа ssh в его директорию
+  hosts: sandbox
+  become: yes
+
+  vars:
+    username: maushp
+    password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          64323338346333386330383364386565376664626133626463656461653131346264633166616635
+          6266633232633434653630623362626165396137313631350a383937636661333435376664316264
+          33363863613533363431643166323864386439613363613837353533313365306633303133613238
+          6336366535343039640a356431343031323038396366616335646234653633616332613031366262
+          3863
+
+  tasks:
+    - name: Создание пользователя maushp
+      user: 
+        name: "{{ username }}"
+        state: present
+        groups: wheel
+        append: yes
+        update_password: on_create
+        password: "{{ password }}"
+        shell: /bin/bash
+
+    - name: Копирование ключа ssh
+      authorized_key: 
+        user: "maushp" 
+        key: "{{ item }}"
+      with_file:
+        - '/home/revolman/.ssh/id_rsa.pub'
