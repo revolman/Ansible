@@ -8,6 +8,7 @@ node1
 
 [sandbox]
 node1
+node2
 
 [kube-test]
 node4
