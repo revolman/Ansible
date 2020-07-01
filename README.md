@@ -4,7 +4,7 @@
 ## /roles/
 
 Создержит роли различные роли, которые вызываются плейбуками из корня
-- плейбук use-roles.yml - вызов mariadb, nginx, php-fpm, wordpress
+- плейбук wordpress.yml - вызов mariadb, nginx, php-fpm, wordpress
 - плейбук use-roles-elk.yml - установка ELK-стека на centos
 
 ### ansible-vault
