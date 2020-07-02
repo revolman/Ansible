@@ -81,6 +81,10 @@ mysql_databases:
     collation: utf8_general_ci
     encoding: utf8
     replicate: 1
+  - name: db
+    collation: utf8_general_ci
+    encoding: utf8
+    replicate: 1
   - name: example
     collation: utf8_general_ci
     encoding: utf8
@@ -92,6 +96,10 @@ mysql_users:
     host: 127.0.0.1
     password: secret123
     priv: 'mywp.*:ALL/example.*:CREATE,SELECT'
+  - name: db
+    host: worker-%
+    password: dbpw
+    priv: '*.*:ALL,GRANT'
   - name: revolman
     host: 127.0.0.1
     password: revolman

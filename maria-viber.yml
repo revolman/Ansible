@@ -1,0 +1,9 @@
+---
+# Роль для подготовки
+- name: Запуск установки БД на node1
+  hosts: node1
+  become: yes
+
+  roles:
+    - mariadb
+  
