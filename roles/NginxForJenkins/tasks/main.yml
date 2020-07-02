@@ -1,0 +1,27 @@
+---
+# tasks file for NginxForJenkins
+
+- name: 1.Установка Nginx
+  yum: name=nginx state=latest
+
+- name: 2.Перенос конфигурации
+  copy: src={{ item }} dest={{ nginxConf }} mode=0644
+  with_items:
+    - nginx.conf
+  notify:
+  - nginx-reload
+  
+- name: 3.Перенос vhost
+  copy: src=default.conf dest={{ nginxConf }}/conf.d mode=0644
+  notify:
+  - nginx-reload
+
+- name: 4.Перенос файлов сайта
+  copy: src={{ item }} dest={{ siteRoot }} mode=0644
+  with_items:
+    - index.html
+  notify:
+  - nginx-reload
+
+- name: 5.Запуск Nginx
+  service: name=nginx state=started enabled=yes

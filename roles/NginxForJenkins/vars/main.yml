@@ -1,0 +1,4 @@
+---
+# vars file for NginxForJenkins
+nginxConf: /etc/nginx
+siteRoot: /usr/share/nginx/html

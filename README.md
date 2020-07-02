@@ -4,8 +4,13 @@
 ## /roles/
 
 Создержит роли различные роли, которые вызываются плейбуками из корня
-- плейбук use-roles.yml - вызов mariadb, nginx, php-fpm, wordpress
+- плейбук wordpress.yml - вызов mariadb, nginx, php-fpm, wordpress
 - плейбук use-roles-elk.yml - установка ELK-стека на centos
+
+
+
+
+## Описание некоторых возможностей
 
 ### ansible-vault
 
@@ -34,3 +39,15 @@ ansible-vault create <my-vault>
 ansible-vault edit <my-vault>
 ansible-vault read <my-vault>
 ```
+
+### создание системного пользователя с использование vault
+
+При создании пользователя по примеру прейбука ```https://github.com/revolman/Ansible/blob/master/create-user-with-key.yml``` нужно не забывать, то передаваться пароль в удалённую систему должен уже в зашифрованном виде.
+Порядок действий:
+- зашифровать пароль в sha512 можно к примеру такой коммандой:
+```ansible all -i localhost, -m debug -a "msg={{ 'Mypasswd\!@' | password_hash('sha512', 'salt') }}"```
+Восклицательный знак "!" нужно экранировать "\!", соль можно придумать любую
+- зашифровать полученный хэш в ansible-vault:
+```echo -n '$6$Hgsad6312$vXfFywEpeC.b/5KtRWMOasWi82w0Of3WKMeLbR98Dk8VIuBXDgnx3En3bBIX73k8afaixkilALkKiT6bgi7KV/' | ansible-vault encrypt_string```
+обязательно использвовать одинарные кавычки: 'хэш'
+- полученный шифр можно вставлять в плейбук на нужное место. Для расшифровки использовать ключ --ask-vault-pass при вызове плейбука.
